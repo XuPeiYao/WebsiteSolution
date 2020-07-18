@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
+using AutoMapper;
+
 using LinqToDB;
+using LinqToDB.DataProvider.PostgreSQL;
 using LinqToDB.DataProvider.SQLite;
 
 using Microsoft.AspNetCore.Builder;
@@ -18,23 +21,42 @@ using Microsoft.Extensions.Hosting;
 
 using XPY.ToolKit.Utilities.Common;
 using XPY.WebsiteSolution.Database;
+using XPY.WebsiteSolution.Models;
+using XPY.WebsiteSolution.Models.MapperProfiles;
+using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.CycleDependent;
+using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.Injectable;
+using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.OpenApi;
 using XPY.WebsiteSolution.Utilities.Token;
 
 namespace XPY.WebsiteSolution.Web
 {
     public class Startup
     {
+        public static IConfiguration Configuration { get; private set; }
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+
+            services.Configure<FormOptions>(x =>
+            {
+                x.MultipartBodyLengthLimit = long.MaxValue;
+            });
+
+            services.AddHttpContextAccessor();
+
             services.AddLogging();
-            LinqToDB.DataProvider.SQLite.SQLiteTools.CreateDatabase("Sample");
 
             services.AddScoped(sp =>
             {
-                return new SampleContext(
-                    new LinqToDB.DataProvider.SQLite.SQLiteDataProvider(ProviderName.SQLiteClassic),
+                return new WebsiteSolutionContext(
+                    new PostgreSQLDataProvider(),
                     sp.GetRequiredService<IConfiguration>().GetConnectionString("Default"));
             });
 
@@ -42,10 +64,22 @@ namespace XPY.WebsiteSolution.Web
 
             services.AddResponseCaching();
 
-            services.AddJwtHelper<DefaultJwtTokenModel>();
+            services.AddJwtHelper<DefaultJwtTokenModel>(
+                issuer: Configuration["JWT:Issuer"],
+                audience: Configuration["JWT:Audience"],
+                secureKey: Configuration["JWT:SecureKey"]);
+            services.AddAuthorization();
+
+            services.AddInjectable();
 
             services.AddMvc()
                 .AddControllersAsServices();
+
+            services.AddCycleDI();
+
+            services.AddAutoMapper(typeof(SampleUserModel));
+
+            services.AddOpenApi(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,7 +89,7 @@ namespace XPY.WebsiteSolution.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-
+                        
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.All
@@ -67,11 +101,14 @@ namespace XPY.WebsiteSolution.Web
             app.UseResponseBuffering();
 
             app.UseRouting();
-
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
             app.UseStatusCodePagesWithReExecute("/");
             app.UseDefaultFiles();

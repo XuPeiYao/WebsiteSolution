@@ -4,4 +4,14 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Unity" Version="5.11.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XPY.WebsiteSolution.Database\XPY.WebsiteSolution.Database.csproj" />
+    <ProjectReference Include="..\XPY.WebsiteSolution.Models\XPY.WebsiteSolution.Models.csproj" />
+    <ProjectReference Include="..\XPY.WebsiteSolution.Utilities\XPY.WebsiteSolution.Utilities.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -2,29 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
+ 
+using Microsoft.AspNetCore.Mvc; 
 
 using Unity;
 
-using XPY.WebsiteSolution.Database;
+using XPY.WebsiteSolution.Models;
+using XPY.WebsiteSolution.Services;
 
 namespace XPY.WebsiteSolution.Web.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Produces("application/json")]     
+    [Produces("application/json")]
     public class SampleController : ControllerBase
     {
         [Dependency]
-        public SampleContext Context { get; set; }
-
+        public WebsiteSolutionServices Context { get; set; }
+        
         [HttpGet]
-        public IEnumerable<object> Get()
+        public SampleUser Get()
         {
-            return new object[] { "A", "B", "C", new { D="D" } };
+            return Context.Mapper.Map<SampleUser>(new SampleUserModel()
+            {
+                UserId = "xxxxx"
+            }); 
         }
     }
 }

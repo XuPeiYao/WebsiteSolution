@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.JWT;
+
 namespace XPY.WebsiteSolution.Utilities.Token
 {
     public static class JwtHelperDependencyInjectionExtension
@@ -18,6 +20,9 @@ namespace XPY.WebsiteSolution.Utilities.Token
         /// <returns>服務容器</returns>
         public static IServiceCollection AddJwtHelper<TJwtTokenModel>(
             this IServiceCollection serviceCollection,
+            string issuer,
+            string audience,
+            string secureKey,
             Action<JwtOption> configureOptions = null
             )
         {
@@ -33,11 +38,13 @@ namespace XPY.WebsiteSolution.Utilities.Token
             { 
                 return new JwtHelper<TJwtTokenModel>(Options.Create<JwtOption>(new JwtOption()
                 {
-                    Issuer = sp.GetService<IConfiguration>()["JWT:Issuer"],
-                    Audience = sp.GetService<IConfiguration>()["JWT:Audience"],
-                    SecureKey = sp.GetService<IConfiguration>()["JWT:SecureKey"],
+                    Issuer = issuer,
+                    Audience = audience,
+                    SecureKey = secureKey,
                 }));
             });
+
+            serviceCollection.AddJwt(issuer, audience, secureKey);
 
             return serviceCollection;
         }
