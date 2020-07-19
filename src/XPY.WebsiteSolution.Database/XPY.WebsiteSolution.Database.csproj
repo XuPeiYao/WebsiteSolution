@@ -9,4 +9,9 @@
     <PackageReference Include="linq2db" Version="3.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\" />
+    <Folder Include="Tables\" />
+  </ItemGroup>
+
 </Project>
