@@ -19,10 +19,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using XPY.ToolKit.Utilities.Common;
 using XPY.WebsiteSolution.Database;
 using XPY.WebsiteSolution.Models;
-using XPY.WebsiteSolution.Models.MapperProfiles;
+using XPY.WebsiteSolution.Services;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.CycleDependent;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.Injectable;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.OpenApi;
@@ -44,9 +43,18 @@ namespace XPY.WebsiteSolution.Web
         {
             services.AddOptions();
 
-            services.Configure<FormOptions>(x =>
+            services.Configure<FormOptions>(config =>
             {
-                x.MultipartBodyLengthLimit = long.MaxValue;
+                config.MultipartBodyLengthLimit = long.MaxValue;
+            });
+
+            services.Configure<MinioOptions>(config =>
+            {
+                config.EndPoint = Configuration["Minio:EndPoint"];
+                config.WithSSL = Configuration.GetValue<bool>("Minio:WithSSL");
+                config.BucketName = Configuration["Minio:BucketName"];
+                config.AccessKey = Configuration["Minio:AccessKey"];
+                config.SecretKey = Configuration["Minio:SecretKey"]; 
             });
 
             services.AddHttpContextAccessor();
@@ -57,7 +65,7 @@ namespace XPY.WebsiteSolution.Web
             {
                 return new WebsiteSolutionContext(
                     new PostgreSQLDataProvider(),
-                    sp.GetRequiredService<IConfiguration>().GetConnectionString("Default"));
+                    Configuration.GetConnectionString("Default"));
             });
 
             services.AddResponseCompression();
@@ -76,6 +84,8 @@ namespace XPY.WebsiteSolution.Web
                 .AddControllersAsServices();
 
             services.AddCycleDI();
+
+            //services.AddHealthChecks();
 
             services.AddAutoMapper(typeof(SampleUserModel));
 
@@ -102,8 +112,10 @@ namespace XPY.WebsiteSolution.Web
 
             app.UseRouting();
             app.UseAuthorization();
+                        
             app.UseEndpoints(endpoints =>
             {
+                //endpoints.MapHealthChecks("/health");
                 endpoints.MapControllers();
             });
 

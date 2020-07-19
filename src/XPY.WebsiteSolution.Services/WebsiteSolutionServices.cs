@@ -8,6 +8,7 @@ using Unity;
 
 using XPY.WebsiteSolution.Database;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.Injectable;
+using XPY.WebsiteSolution.Utilities.Token;
 
 namespace XPY.WebsiteSolution.Services
 {
@@ -16,6 +17,9 @@ namespace XPY.WebsiteSolution.Services
     {
         [Dependency]
         public WebsiteSolutionContext Context { get; set; }
+
+        [Dependency]
+        public JwtHelper<DefaultJwtTokenModel> JwtHelper { get; set; }
 
         [Dependency]
         public IMapper Mapper { get; set; }
