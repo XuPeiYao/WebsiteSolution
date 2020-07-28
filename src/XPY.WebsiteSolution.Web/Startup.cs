@@ -18,8 +18,10 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.ObjectPool;
 
 using XPY.WebsiteSolution.Database;
+using XPY.WebsiteSolution.Database.Pooling;
 using XPY.WebsiteSolution.Models;
 using XPY.WebsiteSolution.Services;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.CycleDependent;
@@ -61,11 +63,31 @@ namespace XPY.WebsiteSolution.Web
 
             services.AddLogging();
 
+            /*
             services.AddScoped(sp =>
             {
                 return new WebsiteSolutionContext(
                     new PostgreSQLDataProvider(),
                     Configuration.GetConnectionString("Default"));
+            });
+            */
+
+            services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>(sp=>            
+                new DefaultObjectPoolProvider()
+                {
+                    MaximumRetained = 100
+                }
+            );
+            services.AddSingleton(sp =>
+                new Linq2DbContextPooledObjectPolicy(
+                    new PostgreSQLDataProvider(),
+                    Configuration.GetConnectionString("Default")
+                )
+            );
+            services.AddSingleton(s =>
+            {
+                var provider = s.GetRequiredService<ObjectPoolProvider>();
+                return provider.Create(s.GetRequiredService<Linq2DbContextPooledObjectPolicy>());
             });
 
             services.AddResponseCompression();
