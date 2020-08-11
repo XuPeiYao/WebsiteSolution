@@ -5,10 +5,9 @@ using System.Threading.Tasks;
  
 using Microsoft.AspNetCore.Mvc; 
 
-using Unity;
-
 using XPY.WebsiteSolution.Models;
 using XPY.WebsiteSolution.Services;
+using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.Autofac;
 
 namespace XPY.WebsiteSolution.Web.Controllers
 {

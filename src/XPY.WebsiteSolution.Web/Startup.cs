@@ -28,12 +28,17 @@ using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.CycleDependen
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.Injectable;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.OpenApi;
 using XPY.WebsiteSolution.Utilities.Token;
+using Autofac;
+using RestSharp.Extensions;
+using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.Autofac;
+using XPY.WebsiteSolution.Web.Controllers;
 
 namespace XPY.WebsiteSolution.Web
 {
     public class Startup
     {
         public static IConfiguration Configuration { get; private set; }
+        private IServiceCollection _services;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -42,7 +47,7 @@ namespace XPY.WebsiteSolution.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
-        {
+        { 
             services.AddOptions();
 
             services.Configure<FormOptions>(config =>
@@ -93,7 +98,7 @@ namespace XPY.WebsiteSolution.Web
             services.AddResponseCompression();
 
             services.AddResponseCaching();
-
+            
             services.AddJwtHelper<DefaultJwtTokenModel>(
                 issuer: Configuration["JWT:Issuer"],
                 audience: Configuration["JWT:Audience"],
@@ -106,12 +111,28 @@ namespace XPY.WebsiteSolution.Web
                 .AddControllersAsServices();
 
             services.AddCycleDI();
-
+            
             //services.AddHealthChecks();
 
             services.AddAutoMapper(typeof(SampleUserModel));
 
-            services.AddOpenApi(); 
+            services.AddOpenApi();
+
+            _services = services;
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            foreach (var type in _services) {
+                if (type.ServiceType.GetProperties().All(x => x.GetAttribute<DependencyAttribute>() == null))
+                {
+                    continue;
+                }
+                builder.RegisterType(type.ServiceType).PropertiesAutowired((property, sender) =>
+                {
+                    return property.GetAttribute<DependencyAttribute>() != null;
+                }); 
+            } 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
