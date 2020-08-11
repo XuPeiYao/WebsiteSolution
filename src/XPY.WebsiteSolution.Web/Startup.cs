@@ -32,6 +32,7 @@ using Autofac;
 using RestSharp.Extensions;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.Autofac;
 using XPY.WebsiteSolution.Web.Controllers;
+using Autofac.Extras.DynamicProxy;
 
 namespace XPY.WebsiteSolution.Web
 {
@@ -122,16 +123,19 @@ namespace XPY.WebsiteSolution.Web
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
-        {
+        { 
+            builder.RegisterType<CallLogger>();
             foreach (var type in _services) {
                 if (type.ServiceType.GetProperties().All(x => x.GetAttribute<DependencyAttribute>() == null))
                 {
                     continue;
                 }
-                builder.RegisterType(type.ServiceType).PropertiesAutowired((property, sender) =>
-                {
-                    return property.GetAttribute<DependencyAttribute>() != null;
-                }); 
+                builder.RegisterType(type.ServiceType)
+                    .PropertiesAutowired((property, sender) =>
+                    {
+                        return property.GetAttribute<DependencyAttribute>() != null;
+                    })
+                    .EnableClassInterceptors(); 
             } 
         }
 

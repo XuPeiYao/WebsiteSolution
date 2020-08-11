@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
- 
+
+using Autofac.Extras.DynamicProxy;
+
 using Microsoft.AspNetCore.Mvc; 
 
 using XPY.WebsiteSolution.Models;
@@ -14,17 +16,18 @@ namespace XPY.WebsiteSolution.Web.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
+    [Intercept(typeof(CallLogger))]
     public class SampleController : ControllerBase
     {
         [Dependency]
         public WebsiteSolutionServices Context { get; set; }
         
         [HttpGet]
-        public SampleUser Get()
+        public virtual SampleUser Get(string user)
         {
             return Context.Mapper.Map<SampleUser>(new SampleUserModel()
             {
-                UserId = "xxxxx"
+                UserId = user
             }); 
         }
     }
