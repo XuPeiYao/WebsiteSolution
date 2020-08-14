@@ -1,5 +1,4 @@
-﻿using LinqToDB.Data;
-using LinqToDB.DataProvider;
+﻿using Microsoft.EntityFrameworkCore;
 
 using System;
 using System.Collections.Generic;
@@ -10,19 +9,9 @@ namespace XPY.WebsiteSolution.Database
     /// <summary>
     /// DAO
     /// </summary>
-    public class WebsiteSolutionContext : DataConnection
+    public class WebsiteSolutionContext : DbContext
     {
 
-        //public ITable<SampleTableDao> SampleTableDao => GetTable<SampleTableDao>();
-
-        /// <summary>
-        /// 初始化 <see cref="WebsiteSolutionContext"/>
-        /// </summary>
-        /// <param name="dataProvider">資料提供者</param>
-        /// <param name="connectionString">資料庫連線字串</param>
-        public WebsiteSolutionContext(IDataProvider dataProvider, string connectionString)
-            : base(dataProvider, connectionString)
-        {
-        }
+        //public DbSet<SampleTableDao> SampleTableDao { get; set; } 
     }
 }
