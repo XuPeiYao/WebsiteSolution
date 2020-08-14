@@ -14,38 +14,15 @@ using XPY.WebsiteSolution.Utilities.Token;
 namespace XPY.WebsiteSolution.Services
 {
     [Injectable]
-    public class WebsiteSolutionServices: IDisposable
+    public class WebsiteSolutionServices
     {
         [Dependency]
-        public ObjectPool<WebsiteSolutionContext> ContextPool { get; set; }
-
-
-        private WebsiteSolutionContext _context;        
-        public WebsiteSolutionContext Context {
-            get
-            {
-                if(_context != null)
-                {
-                    return _context;
-                }
-                return ContextPool.Get();
-            }
-        }
-
+        public WebsiteSolutionContext Context { get; set; }
 
         [Dependency]
         public JwtHelper<DefaultJwtTokenModel> JwtHelper { get; set; }
 
         [Dependency]
         public IMapper Mapper { get; set; }
-
-        public void Dispose()
-        {
-            if(_context!=null)
-            {
-                ContextPool.Return(_context);
-                _context = null;
-            }
-        }
     }
 }
