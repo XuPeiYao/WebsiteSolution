@@ -28,7 +28,6 @@ using XPY.WebsiteSolution.Database;
 using XPY.WebsiteSolution.Database.Pooling;
 using XPY.WebsiteSolution.Models;
 using XPY.WebsiteSolution.Services;
-using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.CycleDependent;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.Injectable;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.OpenApi;
 using XPY.WebsiteSolution.Utilities.Token;
@@ -36,6 +35,7 @@ using Autofac;
 using RestSharp.Extensions;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.Autofac;
 using XPY.WebsiteSolution.Web.Controllers;
+using Autofac.Extras.DynamicProxy;
 
 namespace XPY.WebsiteSolution.Web
 {
@@ -114,8 +114,6 @@ namespace XPY.WebsiteSolution.Web
             services.AddMvc()
                 .AddControllersAsServices();
 
-            services.AddCycleDI();
-            
             //services.AddHealthChecks();
 
             services.AddAutoMapper(typeof(SampleUserModel));
@@ -133,10 +131,11 @@ namespace XPY.WebsiteSolution.Web
                 {
                     continue;
                 }
-                builder.RegisterType(type.ServiceType).PropertiesAutowired((property, sender) =>
-                {
-                    return property.GetAttribute<DependencyAttribute>() != null;
-                }); 
+                builder.RegisterType(type.ServiceType)
+                    .PropertiesAutowired(
+                        new DependencyPropertySelector(),
+                        true
+                    ); 
             } 
         }
          

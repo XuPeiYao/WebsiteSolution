@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
- 
+
+using Autofac.Extras.DynamicProxy;
+
 using Microsoft.AspNetCore.Mvc; 
 
 using XPY.WebsiteSolution.Models;
@@ -20,12 +22,12 @@ namespace XPY.WebsiteSolution.Web.Controllers
         public WebsiteSolutionServices Context { get; set; }
         
         [HttpGet]
-        [CallLogAttribute]
-        public virtual SampleUser Get()
+        [CallLog]
+        public virtual SampleUser Get(string user)
         {
             return Context.Mapper.Map<SampleUser>(new SampleUserModel()
             {
-                UserId = "xxxxx"
+                UserId = user
             }); 
         }
     }
