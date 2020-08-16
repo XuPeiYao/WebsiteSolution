@@ -127,6 +127,7 @@ namespace XPY.WebsiteSolution.Web
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
+            builder.RegisterDynamicProxy();
             foreach (var type in _services) {
                 if (type.ServiceType.GetProperties().All(x => x.GetAttribute<DependencyAttribute>() == null))
                 {
@@ -138,12 +139,7 @@ namespace XPY.WebsiteSolution.Web
                 }); 
             } 
         }
-
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            builder.RegisterDynamicProxy();
-        }
-
+         
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

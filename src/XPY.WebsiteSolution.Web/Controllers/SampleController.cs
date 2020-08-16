@@ -21,7 +21,7 @@ namespace XPY.WebsiteSolution.Web.Controllers
         
         [HttpGet]
         [CallLogAttribute]
-        public SampleUser Get()
+        public virtual SampleUser Get()
         {
             return Context.Mapper.Map<SampleUser>(new SampleUserModel()
             {

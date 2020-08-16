@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="AspectCore.Extensions.Autofac" Version="2.1.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="linq2db.PostgreSQL" Version="3.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Buffering" Version="0.2.2" />
     <PackageReference Include="NLog" Version="4.7.3" />
