@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
+using AspectCore.Extensions.Autofac;
+
+using Autofac;
+
 using AutoMapper;
 
 using LinqToDB;
@@ -112,6 +116,11 @@ namespace XPY.WebsiteSolution.Web
             services.AddAutoMapper(typeof(SampleUserModel));
 
             services.AddOpenApi(); 
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterDynamicProxy();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
