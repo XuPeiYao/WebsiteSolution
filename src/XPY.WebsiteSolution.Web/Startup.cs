@@ -35,7 +35,6 @@ using Autofac;
 using RestSharp.Extensions;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.Autofac;
 using XPY.WebsiteSolution.Web.Controllers;
-using Autofac.Extras.DynamicProxy;
 
 namespace XPY.WebsiteSolution.Web
 {
