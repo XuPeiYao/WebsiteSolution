@@ -28,6 +28,7 @@ using Autofac;
 using RestSharp.Extensions;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.Autofac;
 using XPY.WebsiteSolution.Web.Controllers;
+using Microsoft.EntityFrameworkCore.Internal;
 using Autofac.Extras.DynamicProxy;
 
 namespace XPY.WebsiteSolution.Web
@@ -65,10 +66,21 @@ namespace XPY.WebsiteSolution.Web
 
             services.AddLogging();
 
-            services.AddDbContext<WebsiteSolutionContext>(options =>
+            services.AddDbContextPool<WebsiteSolutionContext>(options =>
             {
                 options.UseNpgsql(Configuration.GetConnectionString("Default"));
-            });
+            }, 100);
+
+            #region 解決DbContextPool的DbContext唯一建構式限制
+            services.AddSingleton(
+                sp => new Database.DbContextPool<WebsiteSolutionContext>(
+                    sp.GetService<DbContextOptions<WebsiteSolutionContext>>()));
+
+            services.AddScoped<Database.DbContextPool<WebsiteSolutionContext>.Lease>();
+
+            services.AddScoped(
+                sp => (WebsiteSolutionContext)sp.GetService<Database.DbContextPool<WebsiteSolutionContext>.Lease>().Context);
+            #endregion
 
             services.AddResponseCompression();
 
