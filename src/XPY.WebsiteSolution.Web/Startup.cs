@@ -33,6 +33,7 @@ using RestSharp.Extensions;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.Autofac;
 using XPY.WebsiteSolution.Web.Controllers;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace XPY.WebsiteSolution.Web
 {
@@ -69,20 +70,26 @@ namespace XPY.WebsiteSolution.Web
 
             services.AddLogging();
 
-            services.AddDbContextPool<WebsiteSolutionContext>(options =>
-            {
-                options.UseNpgsql(Configuration.GetConnectionString("Default"));
-            }, 100);
+            services.AddDbContext<WebsiteSolutionContext>(config =>
+            {                
+                config.UseNpgsql(Configuration.GetConnectionString("Default"));
+
+                var extension = config.Options.FindExtension<CoreOptionsExtension>() ?? new CoreOptionsExtension();
+                extension = extension.WithMaxPoolSize(100); 
+                ((IDbContextOptionsBuilderInfrastructure)config).AddOrUpdateExtension(extension);
+            });
 
             #region 解決DbContextPool的DbContext唯一建構式限制
             services.AddSingleton(
-                sp => new Database.DbContextPool<WebsiteSolutionContext>(
+                sp => new CustomDbContextPool<WebsiteSolutionContext>(
                     sp.GetService<DbContextOptions<WebsiteSolutionContext>>()));
 
-            services.AddScoped<Database.DbContextPool<WebsiteSolutionContext>.Lease>();
+            services.AddScoped<CustomDbContextPool<WebsiteSolutionContext>.Lease>();
 
             services.AddScoped(
-                sp => (WebsiteSolutionContext)sp.GetService<Database.DbContextPool<WebsiteSolutionContext>.Lease>().Context);
+                sp => {
+                    return (WebsiteSolutionContext)sp.GetService<CustomDbContextPool<WebsiteSolutionContext>.Lease>().Context;
+                });
             #endregion
 
             services.AddResponseCompression();

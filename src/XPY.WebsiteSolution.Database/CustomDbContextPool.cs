@@ -22,7 +22,7 @@ namespace XPY.WebsiteSolution.Database
     ///     any release. You should only use it directly in your code with extreme caution and knowing that
     ///     doing so can result in application failures when updating to a new Entity Framework Core release.
     /// </summary>
-    public class DbContextPool<TContext> : IDbContextPool, IDisposable, IAsyncDisposable
+    public class CustomDbContextPool<TContext> : IDbContextPool, IDisposable, IAsyncDisposable
         where TContext : DbContext
     {
         private const int DefaultPoolSize = 32;
@@ -44,7 +44,7 @@ namespace XPY.WebsiteSolution.Database
         /// </summary>
         public sealed class Lease : IDisposable, IAsyncDisposable
         {
-            private DbContextPool<TContext> _contextPool;
+            private CustomDbContextPool<TContext> _contextPool;
 
             /// <summary>
             ///     This is an internal API that supports the Entity Framework Core infrastructure and not subject to
@@ -52,7 +52,7 @@ namespace XPY.WebsiteSolution.Database
             ///     any release. You should only use it directly in your code with extreme caution and knowing that
             ///     doing so can result in application failures when updating to a new Entity Framework Core release.
             /// </summary>
-            public Lease([NotNull] DbContextPool<TContext> contextPool)
+            public Lease([NotNull] CustomDbContextPool<TContext> contextPool)
             {
                 _contextPool = contextPool;
 
@@ -104,7 +104,7 @@ namespace XPY.WebsiteSolution.Database
         ///     any release. You should only use it directly in your code with extreme caution and knowing that
         ///     doing so can result in application failures when updating to a new Entity Framework Core release.
         /// </summary>
-        public DbContextPool([NotNull] DbContextOptions options)
+        public CustomDbContextPool([NotNull] DbContextOptions options)
         {
             _maxSize = options.FindExtension<CoreOptionsExtension>()?.MaxPoolSize ?? DefaultPoolSize;
 
