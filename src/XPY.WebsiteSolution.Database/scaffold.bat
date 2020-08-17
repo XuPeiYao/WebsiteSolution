@@ -1,0 +1,1 @@
+dotnet ef dbcontext scaffold "User ID=;Password=;Host=;Port=5432;Database;" Npgsql.EntityFrameworkCore.PostgreSQL -d -f -c WebsiteSolutionContext
