@@ -20,7 +20,7 @@ namespace XPY.WebsiteSolution.Web.Controllers
         public WebsiteSolutionServices Context { get; set; }
         
         [HttpGet]
-        [CallLog]
+        [Transaction]
         public virtual SampleUser Get(string user)
         {
             return Context.Mapper.Map<SampleUser>(new SampleUserModel()
