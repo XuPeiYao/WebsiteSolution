@@ -21,6 +21,7 @@ using Microsoft.Extensions.ObjectPool;
 using XPY.WebsiteSolution.Database;
 using XPY.WebsiteSolution.Models;
 using XPY.WebsiteSolution.Services;
+using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.CycleDependent;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.Injectable;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.OpenApi;
 using XPY.WebsiteSolution.Utilities.Token;
@@ -104,6 +105,8 @@ namespace XPY.WebsiteSolution.Web
             services.AddMvc()
                 .AddControllersAsServices();
 
+            services.AddCycleDI();
+            
             //services.AddHealthChecks();
 
             services.AddAutoMapper(typeof(SampleUserModel));
