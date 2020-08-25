@@ -154,8 +154,13 @@ namespace XPY.WebsiteSolution.Web
             app.UseResponseBuffering();
 
             app.UseRouting();
+
+            // 認證方法
+            app.UseAuthentication();
+
+            // 授權
             app.UseAuthorization();
-                        
+
             app.UseEndpoints(endpoints =>
             {
                 //endpoints.MapHealthChecks("/health");
