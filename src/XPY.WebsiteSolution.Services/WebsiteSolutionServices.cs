@@ -28,7 +28,8 @@ namespace XPY.WebsiteSolution.Services
                 {
                     return _context;
                 }
-                return ContextPool.Get();
+                _context = ContextPool.Get();
+                return _context;
             }
         }
 
