@@ -22,9 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\XPY.WebsiteSolution.Application\XPY.WebsiteSolution.Application.csproj" />
     <ProjectReference Include="..\XPY.WebsiteSolution.Database\XPY.WebsiteSolution.Database.csproj" />
     <ProjectReference Include="..\XPY.WebsiteSolution.Models\XPY.WebsiteSolution.Models.csproj" />
-    <ProjectReference Include="..\XPY.WebsiteSolution.Services\XPY.WebsiteSolution.Services.csproj" />
     <ProjectReference Include="..\XPY.WebsiteSolution.Utilities\XPY.WebsiteSolution.Utilities.csproj" />
   </ItemGroup>
 
