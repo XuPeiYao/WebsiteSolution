@@ -1,17 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="5.2.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="3.1.7" />
     <PackageReference Include="Minio" Version="3.1.13" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\XPY.WebsiteSolution.Database\XPY.WebsiteSolution.Database.csproj" />
-    <ProjectReference Include="..\XPY.WebsiteSolution.Models\XPY.WebsiteSolution.Models.csproj" />
     <ProjectReference Include="..\XPY.WebsiteSolution.Utilities\XPY.WebsiteSolution.Utilities.csproj" />
   </ItemGroup>
 
