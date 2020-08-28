@@ -7,9 +7,16 @@ using Autofac.Extras.DynamicProxy;
 
 using Microsoft.AspNetCore.Mvc; 
 
+using AutoMapper;
+
+using MediatR;
+
+using Microsoft.AspNetCore.Mvc;
+
+using XPY.WebsiteSolution.Application;
 using XPY.WebsiteSolution.Models;
-using XPY.WebsiteSolution.Services;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.Autofac;
+using XPY.WebsiteSolution.Utilities.Token;
 
 namespace XPY.WebsiteSolution.Web.Controllers
 {
@@ -18,16 +25,24 @@ namespace XPY.WebsiteSolution.Web.Controllers
     [Produces("application/json")]
     [Intercept(typeof(CallLogger))]
     public class SampleController : ControllerBase
-    {
+    { 
         [Dependency]
-        public WebsiteSolutionServices Context { get; set; }
-        
+        public IMapper Mapper { get; set; }
+
+        [Dependency]
+        public IMediator Mediator { get; set; }
+
+        [Dependency]
+        public JwtHelper<DefaultJwtTokenModel> JwtHelper { get; set; }
+
         [HttpGet]
-        public virtual SampleUser Get(string user)
+        public async Task<SampleUser> Get()
         {
-            return Context.Mapper.Map<SampleUser>(new SampleUserModel()
+            var context = await Mediator.Send(new WebsiteSolutionRequest());
+
+            return Mapper.Map<SampleUser>(new SampleUserModel()
             {
-                UserId = user
+                UserId = await Mediator.Send(new SampleRequest() { Text = "XXXXX" })
             }); 
         }
     }
