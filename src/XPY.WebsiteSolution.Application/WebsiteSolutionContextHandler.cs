@@ -19,36 +19,19 @@ namespace XPY.WebsiteSolution.Application
     }
 
     public class WebsiteSolutionContextHandler :
-        IRequestHandler<WebsiteSolutionRequest, WebsiteSolutionContext>,
-        IDisposable
+        IRequestHandler<WebsiteSolutionRequest, WebsiteSolutionContext>
     {
-        public ObjectPool<WebsiteSolutionContext> ContextPool { get; set; }
-
-        private WebsiteSolutionContext _context;
+        public WebsiteSolutionContext Context { get; set; }
 
         public WebsiteSolutionContextHandler(
-            ObjectPool<WebsiteSolutionContext> contextPool)
+            WebsiteSolutionContext context)
         {
-            ContextPool = contextPool;
+            Context = context;
         }
 
         public async Task<WebsiteSolutionContext> Handle(WebsiteSolutionRequest request, CancellationToken cancellationToken)
         {
-            if (_context != null)
-            {
-                return _context;
-            }
-            _context = ContextPool.Get();
-            return _context;
-        }
-
-        public void Dispose()
-        {
-            if (_context != null)
-            {
-                ContextPool.Return(_context);
-                _context = null;
-            }
+            return Context;
         }
     }
 }
