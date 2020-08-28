@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPY.WebsiteSolution.Database", "XPY.WebsiteSolution.Database\XPY.WebsiteSolution.Database.csproj", "{993249AD-6974-4C3B-8B32-6A4FB215DD72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XPY.WebsiteSolution.Database", "XPY.WebsiteSolution.Database\XPY.WebsiteSolution.Database.csproj", "{993249AD-6974-4C3B-8B32-6A4FB215DD72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPY.WebsiteSolution.Services", "XPY.WebsiteSolution.Services\XPY.WebsiteSolution.Services.csproj", "{A81A76A7-A1A9-4FCB-95D0-A010BF346C87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XPY.WebsiteSolution.Models", "XPY.WebsiteSolution.Models\XPY.WebsiteSolution.Models.csproj", "{ED8A1E23-74E6-4E1C-BD64-B43C410D6997}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPY.WebsiteSolution.Models", "XPY.WebsiteSolution.Models\XPY.WebsiteSolution.Models.csproj", "{ED8A1E23-74E6-4E1C-BD64-B43C410D6997}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XPY.WebsiteSolution.Utilities", "XPY.WebsiteSolution.Utilities\XPY.WebsiteSolution.Utilities.csproj", "{8A4279D8-6E04-4F43-BA95-90F063BE562C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPY.WebsiteSolution.Utilities", "XPY.WebsiteSolution.Utilities\XPY.WebsiteSolution.Utilities.csproj", "{8A4279D8-6E04-4F43-BA95-90F063BE562C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XPY.WebsiteSolution.Web", "XPY.WebsiteSolution.Web\XPY.WebsiteSolution.Web.csproj", "{F9BAA7E3-A613-4384-8D73-4DC1E9C9FB73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPY.WebsiteSolution.Web", "XPY.WebsiteSolution.Web\XPY.WebsiteSolution.Web.csproj", "{F9BAA7E3-A613-4384-8D73-4DC1E9C9FB73}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPY.WebsiteSolution.Application", "XPY.WebsiteSolution.Application\XPY.WebsiteSolution.Application.csproj", "{CFD9AF8E-39F7-40EC-BBDE-108E647AA02C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,6 @@ Global
 		{993249AD-6974-4C3B-8B32-6A4FB215DD72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{993249AD-6974-4C3B-8B32-6A4FB215DD72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{993249AD-6974-4C3B-8B32-6A4FB215DD72}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A81A76A7-A1A9-4FCB-95D0-A010BF346C87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A81A76A7-A1A9-4FCB-95D0-A010BF346C87}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A81A76A7-A1A9-4FCB-95D0-A010BF346C87}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A81A76A7-A1A9-4FCB-95D0-A010BF346C87}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ED8A1E23-74E6-4E1C-BD64-B43C410D6997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ED8A1E23-74E6-4E1C-BD64-B43C410D6997}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED8A1E23-74E6-4E1C-BD64-B43C410D6997}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{F9BAA7E3-A613-4384-8D73-4DC1E9C9FB73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9BAA7E3-A613-4384-8D73-4DC1E9C9FB73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9BAA7E3-A613-4384-8D73-4DC1E9C9FB73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFD9AF8E-39F7-40EC-BBDE-108E647AA02C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFD9AF8E-39F7-40EC-BBDE-108E647AA02C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFD9AF8E-39F7-40EC-BBDE-108E647AA02C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFD9AF8E-39F7-40EC-BBDE-108E647AA02C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

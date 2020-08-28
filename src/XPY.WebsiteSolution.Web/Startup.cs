@@ -20,14 +20,17 @@ using Microsoft.Extensions.ObjectPool;
 
 using XPY.WebsiteSolution.Database;
 using XPY.WebsiteSolution.Models;
-using XPY.WebsiteSolution.Services;
-using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.CycleDependent;
-using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.Injectable;
 using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.OpenApi;
 using XPY.WebsiteSolution.Utilities.Token;
 
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using MediatR;
+using XPY.WebsiteSolution.Application;
+using Minio;
+using Microsoft.Extensions.Options;
+using XPY.WebsiteSolution.Application.Minio;
+using Unity;
 
 namespace XPY.WebsiteSolution.Web
 {
@@ -59,6 +62,28 @@ namespace XPY.WebsiteSolution.Web
                 config.SecretKey = Configuration["Minio:SecretKey"]; 
             });
 
+            services.AddSingleton(sp =>
+            {
+                var options = sp.GetService<IOptions<MinioOptions>>();
+                var client = new MinioClient(options.Value.EndPoint, options.Value.AccessKey, options.Value.SecretKey);
+
+                if (options.Value.WithSSL)
+                {
+                    client = client.WithSSL();
+                }
+
+                if (!client.BucketExistsAsync(options.Value.BucketName).GetAwaiter().GetResult())
+                {
+                    client.MakeBucketAsync(options.Value.BucketName).GetAwaiter().GetResult();
+                    client.SetPolicyAsync(
+                        options.Value.BucketName,
+                        "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetBucketLocation\"],\"Resource\":[\"arn:aws:s3:::" + options.Value.BucketName + "\"]},{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:ListBucket\"],\"Resource\":[\"arn:aws:s3:::" + options.Value.BucketName + "\"],\"Condition\":{\"StringEquals\":{\"s3:prefix\":[\"shared_\"]}}},{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetObject\"],\"Resource\":[\"arn:aws:s3:::" + options.Value.BucketName + "/shared_*\"]}]}"
+                    ).GetAwaiter().GetResult();
+                }
+
+                return client;
+            });
+
             services.AddHttpContextAccessor();
 
             services.AddLogging();
@@ -72,7 +97,7 @@ namespace XPY.WebsiteSolution.Web
                 ((IDbContextOptionsBuilderInfrastructure)config).AddOrUpdateExtension(extension);
             });
 
-            #region 解決DbContextPool的DbContext唯一建構式限制
+            #region 
             services.AddSingleton(
                 sp => new CustomDbContextPool<WebsiteSolutionContext>(
                     sp.GetService<DbContextOptions<WebsiteSolutionContext>>()));
@@ -95,12 +120,10 @@ namespace XPY.WebsiteSolution.Web
                 secureKey: Configuration["JWT:SecureKey"]);
             services.AddAuthorization();
 
-            services.AddInjectable();
+            services.AddMediatR(config => config.AsScoped(),typeof(SampleHandler));
 
             services.AddMvc()
                 .AddControllersAsServices();
-
-            services.AddCycleDI();
 
             //services.AddHealthChecks();
 
