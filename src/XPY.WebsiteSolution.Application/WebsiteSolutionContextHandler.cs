@@ -13,13 +13,13 @@ using XPY.WebsiteSolution.Utilities.Extensions.DependencyInjection.Autofac;
 
 namespace XPY.WebsiteSolution.Application
 {
-    public class WebsiteSolutionRequest: IRequest<WebsiteSolutionContext>
+    public class WebsiteSolutionContextRequest: IRequest<WebsiteSolutionContext>
     {
 
     }
 
     public class WebsiteSolutionContextHandler :
-        IRequestHandler<WebsiteSolutionRequest, WebsiteSolutionContext>
+        IRequestHandler<WebsiteSolutionContextRequest, WebsiteSolutionContext>
     {
         public WebsiteSolutionContext Context { get; set; }
 
@@ -29,7 +29,7 @@ namespace XPY.WebsiteSolution.Application
             Context = context;
         }
 
-        public async Task<WebsiteSolutionContext> Handle(WebsiteSolutionRequest request, CancellationToken cancellationToken)
+        public async Task<WebsiteSolutionContext> Handle(WebsiteSolutionContextRequest request, CancellationToken cancellationToken)
         {
             return Context;
         }
