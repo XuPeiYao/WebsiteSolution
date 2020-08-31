@@ -12,13 +12,13 @@ using XPY.WebsiteSolution.Database;
 
 namespace XPY.WebsiteSolution.Application
 {
-    public class WebsiteSolutionRequest: IRequest<WebsiteSolutionContext>
+    public class WebsiteSolutionContextRequest: IRequest<WebsiteSolutionContext>
     {
 
     }
 
     public class WebsiteSolutionContextHandler :
-        IRequestHandler<WebsiteSolutionRequest, WebsiteSolutionContext>,
+        IRequestHandler<WebsiteSolutionContextRequest, WebsiteSolutionContext>,
         IDisposable
     {
         public ObjectPool<WebsiteSolutionContext> ContextPool { get; set; }
@@ -31,7 +31,7 @@ namespace XPY.WebsiteSolution.Application
             ContextPool = contextPool;
         }
 
-        public async Task<WebsiteSolutionContext> Handle(WebsiteSolutionRequest request, CancellationToken cancellationToken)
+        public async Task<WebsiteSolutionContext> Handle(WebsiteSolutionContextRequest request, CancellationToken cancellationToken)
         {
             if (_context != null)
             {
