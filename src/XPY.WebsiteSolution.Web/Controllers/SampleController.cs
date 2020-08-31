@@ -33,7 +33,7 @@ namespace XPY.WebsiteSolution.Web.Controllers
         [HttpGet]
         public async Task<SampleUser> Get()
         {
-            var context = await Mediator.Send(new WebsiteSolutionRequest());
+            var context = await Mediator.Send(new WebsiteSolutionContextRequest());
 
             return Mapper.Map<SampleUser>(new SampleUserModel()
             {
